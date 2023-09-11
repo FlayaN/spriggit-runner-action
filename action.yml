@@ -2,8 +2,15 @@ name: 'Run spriggit'
 description: 'Runs spriggit tool'
 author: 'FlayaN'
 inputs:
-  dotspriggitpath:
+  dot_spriggit_path:
     description: 'Path to the .spriggit file'
+    required: false
+    default: .spriggit
+  plugin_path:
+    description: 'Path to the folder containing the root RecordData.yaml'
+    required: true
+  output_path:
+    description: 'Path to the plugin output'
     required: true
 runs:
   using: 'composite'
@@ -25,7 +32,19 @@ runs:
 
     - name: open .spriggit
       shell: bash
-      run: cat ${{ inputs.dotspriggitpath }}" 
+      run: cat ${{ inputs.dot_spriggit_path }}
+
+    - name: fix spriggit permission
+      shell: bash
+      run: chmod +x .github/spriggit/Spriggit.CLI
+
+    - name: run spriggit
+      shell: bash
+      run: .github/spriggit/Spriggit.CLI deserialize -i ${{ inputs.plugin_path }} -o ${{ inputs.output_path }}
+
+    - name: See whats on the agent
+      shell: bash
+      run: ls -a -R .
 
 branding:
   icon: 'tag'
