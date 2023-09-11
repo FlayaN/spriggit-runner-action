@@ -16,23 +16,26 @@ runs:
   using: 'composite'
   steps:
 
+    - name: open .spriggit
+      shell: bash
+      run: cat ${{ inputs.dot_spriggit_path }}
+    
+    - name: get spriggit version from .spriggit
+      shell: bash
+      id: spriggit-version
+      run: |
+        SPRIGGIT_VERSION=$(grep -oP '(?<="Version": ")[^"]*' ${{ inputs.dot_spriggit_path }})
+        echo "SPRIGGIT_VERSION=$SPRIGGIT_VERSION" >> $GITHUB_ENV
+
     - name: Fetch spriggit
       shell: bash
-      run: gh release download -O .github/spriggit.zip -p 'SpriggitLinuxCLI.zip' -R Mutagen-Modding/Spriggit 0.5
+      run: gh release download -O .github/spriggit.zip -p 'SpriggitLinuxCLI.zip' -R Mutagen-Modding/Spriggit ${{ env.SPRIGGIT_VERSION }}
       env:
         GH_TOKEN: ${{ github.token }}
 
     - name: Extract some files
       shell: bash
       run: 7z x .github/spriggit.zip -o.github/spriggit
-
-    - name: See whats on the agent
-      shell: bash
-      run: ls -a -R .
-
-    - name: open .spriggit
-      shell: bash
-      run: cat ${{ inputs.dot_spriggit_path }}
 
     - name: fix spriggit permission
       shell: bash
@@ -41,10 +44,6 @@ runs:
     - name: run spriggit
       shell: bash
       run: .github/spriggit/Spriggit.CLI deserialize -i ${{ inputs.plugin_path }} -o ${{ inputs.output_path }}
-
-    - name: See whats on the agent
-      shell: bash
-      run: ls -a -R .
 
 branding:
   icon: 'tag'
