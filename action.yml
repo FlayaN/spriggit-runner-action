@@ -1,0 +1,20 @@
+name: 'Run spriggit'
+description: 'Runs spriggit tool'
+author: 'FlayaN'
+inputs:
+  dotspriggitpath:
+    description: 'Path to the .spriggit file'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+
+    - name: Fetch spriggit
+      run: gh release download --repo Mutagen-Modding/Spriggit 0.5
+
+    - name: See what we downloaded
+      run: ls
+
+branding:
+  icon: 'tag'
+  color: 'gray-dark'
