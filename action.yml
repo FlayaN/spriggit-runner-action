@@ -12,6 +12,8 @@ runs:
     - name: Fetch spriggit
       shell: bash
       run: gh release download --repo Mutagen-Modding/Spriggit 0.5
+      env:
+        GH_TOKEN: ${{ github.token }}
 
     - name: See what we downloaded
       shell: bash
