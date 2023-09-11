@@ -11,13 +11,21 @@ runs:
 
     - name: Fetch spriggit
       shell: bash
-      run: gh release download --repo Mutagen-Modding/Spriggit 0.5
+      run: gh release download -O .github/spriggit.zip -p 'SpriggitLinuxCLI.zip' -R Mutagen-Modding/Spriggit 0.5
       env:
         GH_TOKEN: ${{ github.token }}
 
-    - name: See what we downloaded
+    - name: Extract some files
       shell: bash
-      run: ls
+      run: 7z x .github/spriggit.zip -o.github/spriggit
+
+    - name: See whats on the agent
+      shell: bash
+      run: ls -a -R .
+
+    - name: open .spriggit
+      shell: bash
+      run: cat ${{ inputs.dotspriggitpath }}" 
 
 branding:
   icon: 'tag'
